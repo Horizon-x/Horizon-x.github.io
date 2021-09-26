@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="zh-CN"><head><!-- hexo injector head_begin start --><link href="https://cdn.jsdelivr.net/npm/hexo-widget-tree@0.1.1/css/index.css" rel="stylesheet"/><!-- hexo injector head_begin end --><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="ONESTONE"><meta name="copyright" content="ONESTONE"><meta name="generator" content="Hexo 5.4.0"><meta name="theme" content="hexo-theme-yun"><title>深入剖析volatile关键字 | ONESTONE Blogs</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.1.25/dist/yun/yun-markdown.min.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".post-content img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><script src="https://cdn.jsdelivr.net/npm/pjax@latest/pjax.min.js" defer></script><script src="/js/pjax.js" defer></script><script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script><link id="light-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism.css" media="(prefers-color-scheme: light)"><link id="dark-prism-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@latest/themes/prism-tomorrow.css" media="(prefers-color-scheme: dark)"><link rel="icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#0078E7"><link rel="alternate icon" href="/yun.ico"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"hostname":"onexstone.online","root":"/","title":"小石头的客栈","version":"1.6.2","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"Search or jump to...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/utils.js"></script><script src="/js/hexo-theme-yun.js"></script><link rel="alternate" href="/atom.xml" title="ONESTONE Blogs" type="application/atom+xml"><meta name="description" content="Java 并发底层原理的支持">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入剖析volatile关键字">
+<meta property="og:url" content="http://onexstone.online/posts/369cb3ec/index.html">
+<meta property="og:site_name" content="ONESTONE Blogs">
+<meta property="og:description" content="Java 并发底层原理的支持">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oscimg.oschina.net/oscnet/up-847fae85f848d492abb003083a403ac0556.gif">
+<meta property="article:published_time" content="2021-09-25T09:29:28.000Z">
+<meta property="article:modified_time" content="2021-09-25T11:12:20.751Z">
+<meta property="article:author" content="ONESTONE">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oscimg.oschina.net/oscnet/up-847fae85f848d492abb003083a403ac0556.gif"><script src="/js/ui/mode.js"></script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="ONESTONE"><img width="96" loading="lazy" src="/images/onexstone.jpg" alt="ONESTONE"><span class="site-author-status" title="永远相信美好的事情即将发生">😊</span></a><div class="site-author-name"><a href="/about/">ONESTONE</a></div><span class="site-name">ONESTONE Blogs</span><sub class="site-subtitle">Youth means limitless possibilities</sub><div class="site-desciption">既然选择了远方，便只顾风雨兼程</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">2</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">1</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">1</span></a></div><a class="site-state-item hty-icon-button" href="/about/#comment" title="留言板"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://z3.ax1x.com/2021/09/25/4sPUZF.png" title="QQ" target="_blank" style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/Horizon-x" title="GitHub" target="_blank" style="color:#6e5494"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://music.163.com/m/user/home?id=107106147" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://b23.tv/vfwGMM" title="bilibili" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://my.oschina.net/onexstone" title="OSCHINA" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-fill"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://z3.ax1x.com/2021/09/24/4DSw9K.png" title="微信公众号" target="_blank" style="color:#1AAD19"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-2-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:paoxbin@qq.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://travellings.link" title="Travelling" target="_blank" style="color:var(--hty-text-color)"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-train-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/albums/" title="Time Machine" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">1. 前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83"><span class="toc-number">2.</span> <span class="toc-text">2. 测试环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-volatile-%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">3.</span> <span class="toc-text">3. volatile 的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-volatile-%E5%9E%8B%E5%8F%98%E9%87%8F%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-number">4.</span> <span class="toc-text">4. volatile 型变量的特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E8%AF%AD%E4%B9%89%E8%A7%A3%E9%87%8A"><span class="toc-number">5.</span> <span class="toc-text">5. 语义解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E7%90%86%E8%A7%A3%E8%AF%AF%E5%8C%BA"><span class="toc-number">6.</span> <span class="toc-text">6. 理解误区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">7.</span> <span class="toc-text">7. 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">8.</span> <span class="toc-text">8. 参考文献</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="http://onexstone.online/posts/369cb3ec/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="ONESTONE"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="ONESTONE Blogs"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">深入剖析volatile关键字</h1><div class="post-meta"><div class="post-time" style="display:inline-block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2021-09-25 17:29:28" itemprop="dateCreated datePublished" datetime="2021-09-25T17:29:28+08:00">2021-09-25</time></div><span class="post-busuanzi"><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读次数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg> <span id="busuanzi_value_page_pv"></span></span></span><span class="post-meta-divider">-</span><a href="#comment"><span class="post-meta-item-icon" title="评论数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chat-3-line"></use></svg> <span class="waline-comment-count" id="/posts/369cb3ec/"></span></span></a><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/Java/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">Java</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/JVM/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">JVM</span></a></span></div><div class="post-author"><div class="author-avatar"><img src="https://www.gravatar.com/avatar/edbd9e18861156418ed9cc3bcc0bff32?s=20&amp;d=https%3A%2F%2Fcdn.jsdelivr.net%2Fgh%2FYunYouJun%2Fcdn%2Fimg%2Favatar%2Fnone.jpg"></div><span class="author-name">ONESTONE</span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body" style="--smc-primary:#0078E7;"><h3 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h3><blockquote>
+<p>关键字 volatile 可以说是 Java 提供的最轻量级的同步机制，但由于它并不容易被正确、完整地理解，因此在笔者查阅了相关资料后，觉得有必要深入剖析一下在 JVM 层面上，对 volatile 型变量都做了哪些支持。</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="2-测试环境"><a href="#2-测试环境" class="headerlink" title="2. 测试环境"></a>2. 测试环境</h3><pre><code>- JDK：
+    - java version &quot;1.8.0_202&quot;
+    - Java(TM) SE Runtime Environment (build 1.8.0_202-b08)
+    - Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)
+- OS：Windows 10
+- IDE：
+    - IntelliJ IDEA 2021.1.3 (Ultimate Edition)
+    - Eclipse IDE , Version: Oxygen.3a Release (4.7.3a)
+- HSDIS plug-in :
+    - [Windows Version](https://github.com/doexit/hsdis.dll)
+</code></pre>
+<hr>
+<h3 id="3-volatile-的定义"><a href="#3-volatile-的定义" class="headerlink" title="3. volatile 的定义"></a>3. volatile 的定义</h3><ul>
+<li>Java 语言规范（第三版）中对 volatile 的定义如下：<blockquote>
+<p>Java 编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致性的更新，线程应该确保通过排他锁单独获得这个变量。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="4-volatile-型变量的特性"><a href="#4-volatile-型变量的特性" class="headerlink" title="4. volatile 型变量的特性"></a>4. volatile 型变量的特性</h3><ul>
+<li>JMM （Java Memory Model, Java 内存模型）中对 volatile 变量定义的特殊规则：<ul>
+<li>要求在工作内存中，每次使用 volatile 变量之前都必须先从主内存刷新最新的值，用于保证能看到其他线程对 volatile 变量所做的修改。</li>
+<li>要求在工作内存中，每次修改 volatile 变量后都必须立刻同步回主内存，用于保证其他线程可以看到自己对 volatile 变量所做的修改。</li>
+<li>要求被 volatile 修饰的变量不会被指令重排序优化，从而保证代码的执行顺序与程序的顺序相同。</li>
+</ul>
+</li>
+<li>因此，当一个变量被定义成 volatile 之后，它将具有以下两个特性：<ul>
+<li>保证此变量对所有线程的可见性；</li>
+<li>禁止指令重排序优化（尤其指变量赋值操作的顺序）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="5-语义解释"><a href="#5-语义解释" class="headerlink" title="5. 语义解释"></a>5. 语义解释</h3><ul>
+<li><p>线程的可见性：</p>
+<blockquote>
+<p>一般指当一条线程修改了这个变量的值，新值对其他线程来说是可以立即得知的。</p>
+</blockquote>
+</li>
+<li><p>JVM 中对该语义的支持</p>
+<ul>
+<li><p>使用双锁检测（DCL）实现的单例模式进行讲解，Java 源代码如下：</p>
+<pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">public class Singleton &#123;
+    private volatile static Singleton instance;
+
+    public static Singleton getInstance() &#123;
+        if (instance &#x3D;&#x3D; null) &#123;
+            synchronized (Singleton.class) &#123;
+                if (instance &#x3D;&#x3D; null) &#123;
+                    instance &#x3D; new Singleton();
+                &#125;
+            &#125;
+        &#125;
+        return instance;
+    &#125;
+
+    public static void main(String[] args) &#123;
+        Singleton.getInstance();
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>其中，对 instance 变量赋值的部分转成汇编代码（此处使用的是 HSDIS 插件，该插件的作用是让 HostSpot 的 -XX:PrintAssembly 指令调用它来把即时编译器动态生成的本地代码还原成汇编代码输出），如下：</p>
+<pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">0x00000000032061dc: movabs $0xd5ec0c38,%rax   ;   &#123;oop(a &#39;java&#x2F;lang&#x2F;Class&#39; &#x3D; &#39;com&#x2F;xxx&#x2F;JVMTest&#x2F;Singleton&#39;)&#125;
+0x00000000032061e6: mov    0x20(%rsp),%rsi
+0x00000000032061eb: mov    %rsi,%r10
+0x00000000032061ee: mov    %r10d,0x68(%rax)
+0x00000000032061f2: shr    $0x9,%rax
+0x00000000032061f6: movabs $0x120b4000,%rsi
+0x0000000003206200: movb   $0x0,(%rax,%rsi,1)
+0x0000000003206204: lock addl $0x0,(%rsp)     ;*putstatic instance
+                                            ; - com.xxx.JVMTest.Singleton::getInstance@24 (line 17)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p>通过对比 volatile 添加前后的汇编代码可以发现，有 volatile 变量修饰的共享变量进行写操作的时候会多执行一个 “lock addl $0x0,(%rsp)” 操作，这个操作的作用相当于一个内存屏障。</p>
+</li>
+<li><p>通过查询 IA32 手册可知，lock 前缀的指令在多核处理器下会引发两件事情：</p>
+<ul>
+<li>将当前处理器缓存行的数据写回到系统内存；</li>
+<li>该写入动作会使其他处理器或者内核中缓存了该内存地址的数据无效化。</li>
+</ul>
+</li>
+<li><p>因此，通过这样一个空操作（addl $0x0,(%rsp)，把RSP寄存器的值加0），就可以让前面 volatile 变量的修改对其他处理器立即可见。同时，因为 lock 指令的本质是对 volatile 变量立即进行 “store” 和 “write” 操作，即该指令依赖于之前对 volatile 变量的其他操作，进而使得处理器不会对 lock 指令进行重排序到 volatile 其他指令之前，也就达到了“指令重排序无法越过内存屏障”的效果。</p>
+</li>
+</ul>
+<hr>
+<h3 id="6-理解误区"><a href="#6-理解误区" class="headerlink" title="6. 理解误区"></a>6. 理解误区</h3><ul>
+<li><p><strong>基于 volatile 变量的运算在并发下是线程安全的。 (×)</strong></p>
+</li>
+<li><p>下面，笔者用一个 volatile 变量自增的例子来说明这个问题</p>
+  <pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">public class VolatileTest &#123;
+
+    public static volatile int count &#x3D; 0;
+
+    public static void increase() &#123;
+        count++;
+    &#125;
+
+    private static final int THREADS_COUNT &#x3D; 20;
+
+    public static void main(String[] args) &#123;
+        Thread[] threads &#x3D; new Thread[THREADS_COUNT];
+        for (int i &#x3D; 0; i &lt; THREADS_COUNT; i++) &#123;
+            threads[i] &#x3D; new Thread(new Runnable() &#123;
+                @Override
+                public void run() &#123;
+                    for (int i &#x3D; 0; i &lt; 100; i++) &#123;
+                        increase();
+                    &#125;
+                &#125;
+            &#125;);
+            threads[i].start();
+        &#125;
+        &#x2F;&#x2F; 等待所有累加线程都结束
+        while (Thread.activeCount() &gt; 1) &#123;
+            Thread.yield();
+        &#125;
+        System.out.println(count);
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>执行演示<br><img src="https://oscimg.oschina.net/oscnet/up-847fae85f848d492abb003083a403ac0556.gif" alt="VolatileTest执行演示" loading="lazy"><em>VolatileTest执行演示</em></p>
+</li>
+<li><p>这段代码的作用是建立了 20 个线程，每个线程对 count 变量进行 100 次自增操作。理论上，在所有线程并发正确的情况下，最后输出的结果应该是 2000 。但通过多次的实际运行可以发现，每次输出的结果都不一样，甚至是一个小于 2000 的数字。</p>
+</li>
+<li><p>使用 javap 命令对 VolatileTest 进行反编译的代码如下：</p>
+  <pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">public static void increase();
+    Code:
+    0: getstatic     #2                  &#x2F;&#x2F; Field count:I
+    3: iconst_1
+    4: iadd
+    5: putstatic     #2                  &#x2F;&#x2F; Field count:I
+    8: return
+    LineNumberTable:
+    line 15: 0
+    line 16: 8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li><p>从字节码层面我们可以很容易的发现问题的所在，当 getstatic 指令把 count 的值取到操作栈顶时， volatile 关键字保证了 count 的值在此时是正确的，但在执行 iconst_1 、iadd 这些指令（非原子操作）的时候，其他线程可能已经把 count 的值改变了，而操作栈顶的值就变成了过期的数据，所以 putstatic 指令执行后就可能把较小的 count 值同步回主内存中。</p>
+</li>
+</ul>
+<hr>
+<h3 id="7-使用场景"><a href="#7-使用场景" class="headerlink" title="7. 使用场景"></a>7. 使用场景</h3><ul>
+<li>通过上面的例子我们应该清楚，由于 volatile 变量只保证可见性，在不符合以下两条规则的运算场景中，我们依然需要通过加锁（使用 synchronized、java.util.concurrent 中的锁或原子类）来保证原子性：<ul>
+<li>运算结果并不依赖变量的当前值（无后效性），或者能够确保只有单一的线程修改变量的值；</li>
+<li>变量不需要与其他的状态变量共同参与不变约束。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8-参考文献"><a href="#8-参考文献" class="headerlink" title="8. 参考文献"></a>8. 参考文献</h3><pre><code>1. 方腾飞, 魏鹏, 程晓明．Java并发编程的艺术 [M]. 北京：机械工业出版社，2015：8-11.
+2. 周志明．深入理解Java虚拟机: JVM高级特性与最佳实践（3 版）[M]. 北京：机械工业出版社，2019：444-450.
+</code></pre>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">你的支持就是我创作的最大的动力.</div><div id="qr" style="display:none;"><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://z3.ax1x.com/2021/09/25/4sPRde.jpg"><img loading="lazy" src="https://z3.ax1x.com/2021/09/25/4sPRde.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a target="_blank" rel="noopener" href="https://z3.ax1x.com/2021/09/25/4sPrxx.png"><img loading="lazy" src="https://z3.ax1x.com/2021/09/25/4sPrxx.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>ONESTONE</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="http://onexstone.online/posts/369cb3ec/" title="深入剖析volatile关键字">http://onexstone.online/posts/369cb3ec/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/posts/4a17b156/" rel="prev" title="Hello World"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">Hello World</span></a></div><div class="post-nav-item"></div></div></div><div class="hty-card" id="comment"><div class="comment-tooltip text-center"><span>要不要和我说些什么？</span><br></div><div id="waline"></div><script>Yun.utils.getScript("https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js", () => {
+  const walineConfig = {"enable":true,"serverURL":"https://my-blogs-comment-system-gkgzbdn2n-horizon-x.vercel.app","visitor":false,"comment":true,"el":"#waline","lang":"zh-CN"}
+  walineConfig.path = "/posts/369cb3ec/"
+  walineConfig.dark = 'html[data-user-color-scheme="dark"]'
+  new Waline(walineConfig)
+}, window.Waline);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021017712号</a></div><div class="copyright"><span>&copy; 2021 </span><a class="with-love" id="animate" href="http://onexstone.online" title="about me"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></a><span class="author"> ONESTONE</span></div><div class="live_time"><span>本客栈已萌萌哒地运行</span><span id="display_live_time"></span><span class="moe-text">(●'◡'●)</span><script>function blog_live_time() {
+  setTimeout(blog_live_time, 1000);
+  const start = new Date('2021-09-24T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div id="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv" title="总访客量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-user-line"></use></svg></span><span id="busuanzi_value_site_uv"></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv" title="总访问量"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye-line"></use></svg></span><span id="busuanzi_value_site_pv"></span></span></div><div class="footer-custom-text">Hosted by <a href="https://github.com/Horizon-x/Horizon-x.github.io" rel="noopener" target="_blank">GitHub Pages</a></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="Search or jump to..." value=""></div><div id="local-search-result"></div></div></div><!-- hexo injector body_end start --><script src="https://cdn.jsdelivr.net/npm/hexo-widget-tree@0.1.1/js/index.js"></script><div id="widget-tree">
+      <ul><li class="tree-list-item"><i class="toggle-post-icon gg-folder-add"></i><a class="tree-list-link" href="/categories/Java/">Java</a><ul class="tree-list-children"><li class="tree-list-item"><a class="tree-list-post-link" href="/posts/369cb3ec/" title="深入剖析volatile关键字"><i class="post-icon gg-file-document"></i>深入剖析volatile关键字</a></li></ul></li></ul>
+        <div id="widget-tree-button">
+          <i class="gg-chevron-right"></i>
+        </div>
+      </div><!-- hexo injector body_end end --><script src="https://cdn.jsdelivr.net/npm/live2d-widget@^3.1.3/lib/L2Dwidget.min.js"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"https://cdn.jsdelivr.net/npm/live2d-widget-model-haruto@1.0.5/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"react":{"opacity":0.7},"log":false});</script></body></html>

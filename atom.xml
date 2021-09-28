@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>ONESTONE Blogs</title>
-  <icon>http://onexstone.online/icon.png</icon>
+  <icon>http://www.onexstone.online/icon.png</icon>
   <subtitle>Youth means limitless possibilities</subtitle>
-  <link href="http://onexstone.online/atom.xml" rel="self"/>
+  <link href="http://www.onexstone.online/atom.xml" rel="self"/>
   
-  <link href="http://onexstone.online/"/>
+  <link href="http://www.onexstone.online/"/>
   <updated>2021-09-26T07:24:03.710Z</updated>
-  <id>http://onexstone.online/</id>
+  <id>http://www.onexstone.online/</id>
   
   <author>
     <name>ONESTONE</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Java项目中的ClassPath的前世今生</title>
-    <link href="http://onexstone.online/posts/ef0e997a/"/>
-    <id>http://onexstone.online/posts/ef0e997a/</id>
+    <link href="http://www.onexstone.online/posts/ef0e997a/"/>
+    <id>http://www.onexstone.online/posts/ef0e997a/</id>
     <published>2021-09-26T07:06:39.000Z</published>
     <updated>2021-09-26T07:24:03.710Z</updated>
     
@@ -30,17 +30,17 @@
     
     
     
-    <category term="Java" scheme="http://onexstone.online/categories/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/categories/Java/"/>
     
     
-    <category term="Java" scheme="http://onexstone.online/tags/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/tags/Java/"/>
     
   </entry>
   
   <entry>
     <title>快速搭建一个简易的SpringBoot项目</title>
-    <link href="http://onexstone.online/posts/78dbede3/"/>
-    <id>http://onexstone.online/posts/78dbede3/</id>
+    <link href="http://www.onexstone.online/posts/78dbede3/"/>
+    <id>http://www.onexstone.online/posts/78dbede3/</id>
     <published>2021-09-26T06:37:20.000Z</published>
     <updated>2021-09-26T07:08:01.976Z</updated>
     
@@ -51,19 +51,19 @@
     
     
     
-    <category term="Spring" scheme="http://onexstone.online/categories/Spring/"/>
+    <category term="Spring" scheme="http://www.onexstone.online/categories/Spring/"/>
     
     
-    <category term="Java" scheme="http://onexstone.online/tags/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/tags/Java/"/>
     
-    <category term="SpringBoot" scheme="http://onexstone.online/tags/SpringBoot/"/>
+    <category term="SpringBoot" scheme="http://www.onexstone.online/tags/SpringBoot/"/>
     
   </entry>
   
   <entry>
     <title>初尝Java的语法糖</title>
-    <link href="http://onexstone.online/posts/d2e8c2c4/"/>
-    <id>http://onexstone.online/posts/d2e8c2c4/</id>
+    <link href="http://www.onexstone.online/posts/d2e8c2c4/"/>
+    <id>http://www.onexstone.online/posts/d2e8c2c4/</id>
     <published>2021-09-26T06:28:44.000Z</published>
     <updated>2021-09-26T06:33:21.506Z</updated>
     
@@ -74,17 +74,17 @@
     
     
     
-    <category term="Java" scheme="http://onexstone.online/categories/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/categories/Java/"/>
     
     
-    <category term="语法糖" scheme="http://onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/"/>
+    <category term="语法糖" scheme="http://www.onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/"/>
     
   </entry>
   
   <entry>
     <title>HTTP协议之状态码</title>
-    <link href="http://onexstone.online/posts/d9c27918/"/>
-    <id>http://onexstone.online/posts/d9c27918/</id>
+    <link href="http://www.onexstone.online/posts/d9c27918/"/>
+    <id>http://www.onexstone.online/posts/d9c27918/</id>
     <published>2021-09-26T06:16:54.000Z</published>
     <updated>2021-09-26T06:24:35.912Z</updated>
     
@@ -95,17 +95,17 @@
     
     
     
-    <category term="网络协议" scheme="http://onexstone.online/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/"/>
+    <category term="网络协议" scheme="http://www.onexstone.online/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/"/>
     
     
-    <category term="HTTP" scheme="http://onexstone.online/tags/HTTP/"/>
+    <category term="HTTP" scheme="http://www.onexstone.online/tags/HTTP/"/>
     
   </entry>
   
   <entry>
     <title>Hello World</title>
-    <link href="http://onexstone.online/posts/4a17b156/"/>
-    <id>http://onexstone.online/posts/4a17b156/</id>
+    <link href="http://www.onexstone.online/posts/4a17b156/"/>
+    <id>http://www.onexstone.online/posts/4a17b156/</id>
     <published>2021-09-26T01:02:21.941Z</published>
     <updated>2021-09-26T05:45:01.322Z</updated>
     
@@ -124,8 +124,8 @@
   
   <entry>
     <title>深入剖析volatile关键字</title>
-    <link href="http://onexstone.online/posts/369cb3ec/"/>
-    <id>http://onexstone.online/posts/369cb3ec/</id>
+    <link href="http://www.onexstone.online/posts/369cb3ec/"/>
+    <id>http://www.onexstone.online/posts/369cb3ec/</id>
     <published>2021-09-25T09:29:28.000Z</published>
     <updated>2021-09-26T07:08:11.215Z</updated>
     
@@ -136,12 +136,12 @@
     
     
     
-    <category term="Java" scheme="http://onexstone.online/categories/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/categories/Java/"/>
     
     
-    <category term="Java" scheme="http://onexstone.online/tags/Java/"/>
+    <category term="Java" scheme="http://www.onexstone.online/tags/Java/"/>
     
-    <category term="JVM" scheme="http://onexstone.online/tags/JVM/"/>
+    <category term="JVM" scheme="http://www.onexstone.online/tags/JVM/"/>
     
   </entry>
   

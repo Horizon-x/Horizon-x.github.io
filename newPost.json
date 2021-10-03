@@ -1,1 +1,1 @@
-{"title":"HotSpot对synchronized的锁优化策略","id":"posts/fa978b73/","date_published":"10/02/2021","summary":"\n前言\n凡是有过 Java 并发编程经验的都应该了解在 JDK 6 及以后中对锁一共有四种状态的描述，分别是：无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态，这些都是 HotSpot 虚拟机对 synchronized 实现的锁机制做的进一步优化。正好笔者最近在翻阅相关的资料，因此觉得有必要记录一下有关 synchronized 的锁优化相关问题。","url":"https://www.onexstone.online/posts/fa978b73/","tags":["JVM","Java","锁优化策略"],"categories":["Java","Java并发编程"]}
+{"title":"测试订阅推送","id":"posts/323a193f/","date_published":"10/03/2021","summary":"\n测试订阅推送功能，test","url":"https://www.onexstone.online/posts/323a193f/","tags":[],"categories":[]}

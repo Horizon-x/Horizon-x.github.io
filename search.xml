@@ -4,19 +4,6 @@
   
     
     <entry>
-      <title>测试订阅推送</title>
-      <link href="/posts/323a193f/"/>
-      <url>/posts/323a193f/</url>
-      
-        <content type="html"><![CDATA[<!--文章摘要部分--><p>测试订阅推送功能，test</p><span id="more"></span><!--文章正文部分-->]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>HotSpot对synchronized的锁优化策略</title>
       <link href="/posts/fa978b73/"/>
       <url>/posts/fa978b73/</url>

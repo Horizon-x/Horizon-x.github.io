@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>Java对象引用的细化</title>
+      <link href="/posts/d4cbe240/"/>
+      <url>/posts/d4cbe240/</url>
+      
+        <content type="html"><![CDATA[<!--文章摘要部分--><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 JVM 的垃圾回收策略中，无论是基于 “引用计数” 算法判断对象的引用数量，还是基于 “可达性分析” 算法判断对象是否引用链可达，在判断对象是否应该被回收时都离不开对象的 “引用”。</p><span id="more"></span><!--文章正文部分--><p>在 JDK1.2 之前，Java 中的对象只存在 “被引用” 和 “未被引用” 两种状态。</p><blockquote><p>Java 中对引用的定义：如果 refence 类型的数据中存储的数值代表的是另一块内存的起始地址，就称该 refence 数据是代表某块内存、某个对象的引用。</p></blockquote><p>但随着程序的空间复杂度越来越高，如何更有效地利用内存就成了大家思考的重点。为了使程序能更加灵活地控制对象的生命周期， Java 在 JDK1.2 后对 “引用” 的概念进行了更细粒度的划分，由高到低依次为：“强引用” 、”软引用” 、“弱引用” 、“虚引用” 、“未引用”。</p><h3 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h3><pre><code>- JDK：    - java version &quot;1.8.0_202&quot;    - Java(TM) SE Runtime Environment (build 1.8.0_202-b08)    - Java HotSpot(TM) 64-Bit Server VM (build 25.202-b08, mixed mode)- OS：Windows 10- IDE：    - IntelliJ IDEA 2021.1.3 (Ultimate Edition) </code></pre><h3 id="未引用"><a href="#未引用" class="headerlink" title="未引用"></a>未引用</h3><p>只创建了对象，但没有对该对象进行任何引用。</p><h4 id="GC-情况"><a href="#GC-情况" class="headerlink" title="GC 情况"></a>GC 情况</h4><ul><li>当 JVM 启动 GC（Garbage Collection，垃圾回收） 时，会直接将这个对象进行回收。</li></ul><h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><ul><li>几乎不会使用。</li></ul><h4 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h4><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">&#x2F;&#x2F; 此处的代码只是创建了一个 Object 类型的对象，&#x2F;&#x2F; 但是这个对象没有被引用。new Object();<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><hr><h3 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h3><p>使用一个变量名存储了对象在内存中的地址（引用赋值），此时对象就处于强引用状态。 </p><h4 id="GC-情况-1"><a href="#GC-情况-1" class="headerlink" title="GC 情况"></a>GC 情况</h4><ul><li>无论任何情况下，只要强引用关系还存在，垃圾收集器就永远不会回收被引用的对象。</li><li>当内存空间不足时，JVM 宁愿抛出 <code>OutOfMemoryError</code> 错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题。</li></ul><h4 id="使用场景-1"><a href="#使用场景-1" class="headerlink" title="使用场景"></a>使用场景</h4><ul><li>对于一些必要的数据对象，要用强引用。</li></ul><h4 id="代码示例-1"><a href="#代码示例-1" class="headerlink" title="代码示例"></a>代码示例</h4><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">&#x2F;&#x2F; 此处的代码在创建了一个Object类型的对象后，&#x2F;&#x2F; 将这个对象在内存中的地址赋值给了变量o，&#x2F;&#x2F; 如此该对象就处于强引用状态Object o &#x3D; new Object();&#x2F;&#x2F; 主动开启JVM的GCSystem.gc();&#x2F;&#x2F; 注意：实际上 JVM 何时进行 GC 操作并不可控！&#x2F;&#x2F; 我们调用System.gc()方法只是起通知作用，JVM 什么时候扫描回收对象是 JVM 自己根据当前系统的状态决定的。&#x2F;&#x2F; 因此更严谨的做法是休眠等待一段时间再验证 GC 的情况Thread.sleep(5000);&#x2F;&#x2F; 此时的变量o依然可以引用到之前的对象。System.out.println(o);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="手动回收被强引用的对象"><a href="#手动回收被强引用的对象" class="headerlink" title="手动回收被强引用的对象"></a>手动回收被强引用的对象</h4><ul><li>如果在 Java 方法的内部有一个强引用，则这个引用保存在 Java 栈中（而真正的引用内容 <code>Object</code> 仍保存在 Java 堆中）。当这个方法执行完后，就会被弹出栈，若此时该强引用对象的引用数为 0，那么这个对象就会被回收。</li><li>为什么在一些代码中，会出现显式的对变量赋 null 值？<ul><li>例如 ArrayList 的源码中，所有删除动作都会使用 <code>elementData[i] = null</code></li></ul></li></ul><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">&#x2F;&#x2F; ArrayList 的 clear() 方法&#x2F;** * Removes all of the elements from this list.  The list will * be empty after this call returns. *&#x2F;public void clear() &#123;    modCount++;    &#x2F;&#x2F; clear to let GC do its work    for (int i &#x3D; 0; i &lt; size; i++)        elementData[i] &#x3D; null;    size &#x3D; 0;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li><strong>其主要目的就是希望在强引用对象不使用时，能弱化其引用状态从而被 GC 及时回收。</strong><blockquote><p>但是也有资料认为这种显式的赋 null 值没有意义。在 JIT 编译下，JIT 编译器进行控制流和数据流分析后，生成的 OopMap 能提供比较精确的信息，不需要通过 null 值来告知对象使命已经完成。退一步说，这时即使有 “=null” 操作，也会被优化掉，生成出来的本地代码与没有 “=null” 操作的版本是一样的。</p></blockquote></li></ul><hr><h3 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h3><p>使用 <code>SoftReference</code> 类对某个对象进行 “描述包装” ，标志对象处于软引用状态。</p><h4 id="GC-情况-2"><a href="#GC-情况-2" class="headerlink" title="GC 情况"></a>GC 情况</h4><ul><li>在系统将要发生内存溢出异常前，会把这些对象列入回收范围内进行第二次回收。</li><li>如果这次回收仍没有足够的内存，才会抛出内存溢出异常。</li><li>当内存不足时，JVM 首先将软引用中的对象引用置为 null，然后通知垃圾回收器进行回收：<strong>（伪代码如下）</strong><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">if( JVM 内存不足 ) &#123;    &#x2F;&#x2F; 将软引用中的对象引用置为 null    str &#x3D; null;    &#x2F;&#x2F; 通知垃圾回收器进行回收    System.gc();&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li></ul><h4 id="使用场景-2"><a href="#使用场景-2" class="headerlink" title="使用场景"></a>使用场景</h4><ul><li>对于一些不是必要，但是有用的数据对象需要使用软引用。例如，网页缓存、图片缓存等…</li><li>还可用来实现内存敏感的高速缓存。</li></ul><h4 id="代码示例-2"><a href="#代码示例-2" class="headerlink" title="代码示例"></a>代码示例</h4><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">&#x2F;&#x2F; 此处代码先创建了一个Object类型的对象，&#x2F;&#x2F; 然后使用SoftReference对这个新建对象进行 “描述包装”，&#x2F;&#x2F; 如此这个新建对象就只处于软引用状态SoftReference&lt;Object&gt; soft &#x3D; new SoftReference&lt;&gt;(new Object());&#x2F;&#x2F; 处于软引用状态的对象，可以使用SoftReference对象的get方法获取&#x2F;&#x2F; 如果不想给对象添加其他引用状态，那么只可以使用SoftReference对象的get方法获取&#x2F;&#x2F; SoftReference对象的get方法的返回值 就好比 强引用状态中的变量名&#x2F;&#x2F; 强引用状态中的变量名如何使用，那么SoftReference对象的get方法的返回值就如何使用System.out.println(soft.get());&#x2F;&#x2F; 主动开启JVM的GCSystem.gc();&#x2F;&#x2F; 注意：实际上 JVM 何时进行 GC 操作并不可控！&#x2F;&#x2F; 我们调用System.gc()方法只是起通知作用，JVM 什么时候扫描回收对象是 JVM 自己根据当前系统的状态决定的。&#x2F;&#x2F; 因此更严谨的做法是休眠等待一段时间再验证 GC 的情况Thread.sleep(5000);&#x2F;&#x2F; 因为此时系统内存依然充足，因此 JVM 并不会主动的去释放处于软引用的对象System.out.println(soft.get());<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><hr><h3 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h3><p>用来描述非必要的对象，且强度比软引用更弱一些。<br>使用 <code>WeakReference</code> 类对某个对象进行 “描述包装” ，标志对象处于弱引用状态。</p><h4 id="GC-情况-3"><a href="#GC-情况-3" class="headerlink" title="GC 情况"></a>GC 情况</h4><ul><li>当垃圾收集器开始工作，无论当前内存是否足够，都会回收只被弱引用关联的对象。</li><li>因此，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。</li></ul><h4 id="使用场景-3"><a href="#使用场景-3" class="headerlink" title="使用场景"></a>使用场景</h4><ul><li>如果一个对象是偶尔(很少)使用，并且希望在使用时随时就能获取到，但又不想影响此对象的垃圾收集，那么你可以使用 <code>WeakReference</code>来记住此对象。</li><li>但是使用弱引用也会带来一些额外的问题：<ul><li>弱引用会使代码更加复杂，并且可能容易出错。任何使用弱引用的代码都需要处理每次使用弱引用时引用被破坏的可能性。如果过度使用弱引用，最终会编写大量额外代码。</li><li>使用弱引用会带来运行时开销。显而易见的代价是创建弱引用并调用 get 。一个不太明显的代价是每次 GC 运行时都需要做大量额外的工作。</li><li>如果对应用程序将来很可能需要的东西使用弱引用，则可能会导致重复创建它的成本。如果这一成本很高（在CPU时间、IO带宽、网络流量等方面）），可能会在一定程度上影响系统的吞吐量。此时，最好给 JVM 更多的内存，而不是使用弱引用。</li></ul></li><li>更详细的内容可以浏览 Stackoverflow 中关于 <a href="https://stackoverflow.com/questions/1640889/when-should-weak-references-be-used">When should weak references be used?</a> 问题的讨论。</li></ul><h4 id="代码示例-3"><a href="#代码示例-3" class="headerlink" title="代码示例"></a>代码示例</h4><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">&#x2F;&#x2F; 此处代码先创建了一个Object类型的对象，&#x2F;&#x2F; 然后使用WeakReference对这个新建对象进行 “描述包装”，&#x2F;&#x2F; 如此这个新建对象就只处于弱引用状态WeakReference&lt;Object&gt; weak &#x3D; new WeakReference&lt;&gt;(new Object());&#x2F;&#x2F; 处于弱引用状态的对象，可以使用WeakReference对象的get方法获取&#x2F;&#x2F; 如果不想给对象添加其他引用状态，那么只可以使用WeakReference对象的get方法获取&#x2F;&#x2F; WeakReference对象的get方法的返回值 就好比 强引用状态中的变量名&#x2F;&#x2F; 强引用状态中的变量名如何使用，那么WeakReference对象的get方法的返回值就如何使用System.out.println(weak.get());&#x2F;&#x2F; 主动开启JVM的GCSystem.gc();&#x2F;&#x2F; 注意：实际上 JVM 何时进行 GC 操作并不可控！&#x2F;&#x2F; 我们调用System.gc()方法只是起通知作用，JVM 什么时候扫描回收对象是 JVM 自己根据当前系统的状态决定的。&#x2F;&#x2F; 因此更严谨的做法是休眠等待一段时间再验证 GC 的情况Thread.sleep(5000);&#x2F;&#x2F; 输出为null&#x2F;&#x2F; 因为GC将只处于弱引用的对象给回收掉了，&#x2F;&#x2F; 所以WeakReference对象无法再引用到之前的 “描述包装” 的对象了System.out.println(weak.get());<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><hr><h3 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h3><p>使用 <code>PhantomReference</code> 类对某个对象进行 “描述包装” ，标志对象处于虚引用状态。<br>虚引用状态完全不会对对象的生存时间构成影响，也无法通过 <code>PhantomReference</code> 对象来取得一个对象实例。</p><p>别称：幽灵引用、幻影引用。</p><h4 id="GC-情况-4"><a href="#GC-情况-4" class="headerlink" title="GC 情况"></a>GC 情况</h4><ul><li>对其的处理与未引用的效果一样，当 JVM 启动 GC（Garbage Collection，垃圾回收） 时，会直接将这个对象进行回收。</li></ul><h4 id="使用场景-4"><a href="#使用场景-4" class="headerlink" title="使用场景"></a>使用场景</h4><ul><li>给一个对象设置虚引用状态的唯一目的就是在这个对象被垃圾回收器回收时希望能收到一个系统通知。</li><li>虚引用与软引用和弱引用的一个区别在于：<blockquote><p>虚引用必须和引用队列 <code>ReferenceQueue</code> 联合使用。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。</p></blockquote></li><li>程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要进行垃圾回收。如果程序发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被回收之前采取必要的行动。</li></ul><h4 id="代码示例-4"><a href="#代码示例-4" class="headerlink" title="代码示例"></a>代码示例</h4><pre class="line-numbers language-Java" data-language="Java"><code class="language-Java">PhantomReference&lt;Object&gt; phantom &#x3D; new PhantomReference&lt;&gt;(new Object(), new ReferenceQueue&lt;Object&gt;());&#x2F;&#x2F; 输出nullSystem.out.println(phantom.get()); <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><hr><h3 id="引用队列"><a href="#引用队列" class="headerlink" title="引用队列"></a>引用队列</h3><p>在创建 <code>SoftReference</code>、<code>WeakReference</code>、<code>PhantomReference</code>对象时，如果使用两参数的构造函数，而构造函数的参数二是<code>ReferenceQueue</code>对象时，那么当对象被 JVM 的 GC 回收时，JVM 会将被回收了对象的 <code>SoftReference</code>、<code>WeakReference</code>、<code>PhantomReference</code>对象添加进 <code>ReferenceQueue</code> 对象，我们可以通过 <code>ReferenceQueue</code> 对象的 <code>remove()</code> 方法获取到添加进<code>ReferenceQueue</code> 对象的<code>SoftReference</code>、<code>WeakReference</code>、<code>PhantomReference</code>对象。</p><hr><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul><li>Java 中 5 种引用的级别和强度由高到低依次为：强引用 -&gt; 软引用 -&gt; 弱引用 -&gt; 虚引用 -&gt; 未引用</li></ul><p><img src="https://oscimg.oschina.net/oscnet/up-b5652c1b89665479e29a6b8a973225803fc.png" alt="四种引用类型之间的区别" loading="lazy"><em>图1 四种引用类型之间的区别</em></p><hr><h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ol><li>周志明．深入理解Java虚拟机: JVM高级特性与最佳实践（3 版）[M]. 北京：机械工业出版社，2019：71-72.</li></ol><blockquote><p>冰，水为之，而寒于水。</p></blockquote><hr>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+          <category> JVM </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> JVM </tag>
+            
+            <tag> Java </tag>
+            
+            <tag> GC </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>9个主流的开源许可协议</title>
       <link href="/posts/d78266f6/"/>
       <url>/posts/d78266f6/</url>
@@ -47,9 +78,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> JVM </tag>
+            
+            <tag> Java </tag>
             
             <tag> 锁优化策略 </tag>
             
@@ -78,9 +109,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> JVM </tag>
+            
+            <tag> Java </tag>
             
             <tag> 线程安全 </tag>
             
@@ -253,9 +284,9 @@
       
         <tags>
             
-            <tag> Java </tag>
-            
             <tag> JVM </tag>
+            
+            <tag> Java </tag>
             
         </tags>
       

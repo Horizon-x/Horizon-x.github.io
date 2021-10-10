@@ -137,13 +137,6 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/HTTP/</loc>
-    <lastmod>2021-10-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.onexstone.online/tags/JVM/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
@@ -165,14 +158,21 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/GC/</loc>
+    <loc>https://www.onexstone.online/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</loc>
+    <loc>https://www.onexstone.online/tags/HTTP/</loc>
+    <lastmod>2021-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.onexstone.online/tags/GC/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -193,14 +193,14 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/</loc>
+    <loc>https://www.onexstone.online/tags/SpringBoot/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/SpringBoot/</loc>
+    <loc>https://www.onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -216,13 +216,6 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2021-10-10</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.onexstone.online/categories/Java/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
@@ -230,7 +223,14 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/MyBlogs%E7%B3%BB%E5%88%97/</loc>
+    <loc>https://www.onexstone.online/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
+    <lastmod>2021-10-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.onexstone.online/categories/Java/JVM/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -244,14 +244,14 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/Spring/</loc>
+    <loc>https://www.onexstone.online/categories/MyBlogs%E7%B3%BB%E5%88%97/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/Java/JVM/</loc>
+    <loc>https://www.onexstone.online/categories/Spring/</loc>
     <lastmod>2021-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

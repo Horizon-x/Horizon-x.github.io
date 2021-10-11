@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>ONESTONE Blogs</title>
+  <title>ONESTONE Blog</title>
   <icon>https://www.onexstone.online/icon.png</icon>
   <subtitle>Youth means limitless possibilities</subtitle>
   <link href="https://www.onexstone.online/atom.xml" rel="self"/>

@@ -22,9 +22,9 @@
       
         <tags>
             
-            <tag> JVM </tag>
-            
             <tag> Java </tag>
+            
+            <tag> JVM </tag>
             
             <tag> GC </tag>
             
@@ -78,9 +78,9 @@
       
         <tags>
             
-            <tag> JVM </tag>
-            
             <tag> Java </tag>
+            
+            <tag> JVM </tag>
             
             <tag> 锁优化策略 </tag>
             
@@ -109,9 +109,9 @@
       
         <tags>
             
-            <tag> JVM </tag>
-            
             <tag> Java </tag>
+            
+            <tag> JVM </tag>
             
             <tag> 线程安全 </tag>
             
@@ -284,9 +284,9 @@
       
         <tags>
             
-            <tag> JVM </tag>
-            
             <tag> Java </tag>
+            
+            <tag> JVM </tag>
             
         </tags>
       

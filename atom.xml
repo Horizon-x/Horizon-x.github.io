@@ -35,9 +35,9 @@
     <category term="JVM" scheme="https://www.onexstone.online/categories/Java/JVM/"/>
     
     
-    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
-    
     <category term="JVM" scheme="https://www.onexstone.online/tags/JVM/"/>
+    
+    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
     <category term="GC" scheme="https://www.onexstone.online/tags/GC/"/>
     
@@ -83,9 +83,9 @@
     <category term="Java并发编程" scheme="https://www.onexstone.online/categories/Java/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
-    
     <category term="JVM" scheme="https://www.onexstone.online/tags/JVM/"/>
+    
+    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
     <category term="锁优化策略" scheme="https://www.onexstone.online/tags/%E9%94%81%E4%BC%98%E5%8C%96%E7%AD%96%E7%95%A5/"/>
     
@@ -110,9 +110,9 @@
     <category term="Java并发编程" scheme="https://www.onexstone.online/categories/Java/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
-    
     <category term="JVM" scheme="https://www.onexstone.online/tags/JVM/"/>
+    
+    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
     <category term="线程安全" scheme="https://www.onexstone.online/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/"/>
     
@@ -135,9 +135,9 @@
     <category term="MyBlogs系列" scheme="https://www.onexstone.online/categories/MyBlogs%E7%B3%BB%E5%88%97/"/>
     
     
-    <category term="MyBlogs" scheme="https://www.onexstone.online/tags/MyBlogs/"/>
-    
     <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
+    
+    <category term="MyBlogs" scheme="https://www.onexstone.online/tags/MyBlogs/"/>
     
   </entry>
   
@@ -181,9 +181,9 @@
     
     <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
-    <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
-    
     <category term="SpringBoot" scheme="https://www.onexstone.online/tags/SpringBoot/"/>
+    
+    <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
     
   </entry>
   
@@ -268,9 +268,9 @@
     <category term="Java并发编程" scheme="https://www.onexstone.online/categories/Java/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"/>
     
     
-    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
-    
     <category term="JVM" scheme="https://www.onexstone.online/tags/JVM/"/>
+    
+    <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
   </entry>
   

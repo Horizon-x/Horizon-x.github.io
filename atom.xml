@@ -135,9 +135,9 @@
     <category term="MyBlogs系列" scheme="https://www.onexstone.online/categories/MyBlogs%E7%B3%BB%E5%88%97/"/>
     
     
-    <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
-    
     <category term="MyBlogs" scheme="https://www.onexstone.online/tags/MyBlogs/"/>
+    
+    <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
     
   </entry>
   
@@ -181,9 +181,9 @@
     
     <category term="Java" scheme="https://www.onexstone.online/tags/Java/"/>
     
-    <category term="SpringBoot" scheme="https://www.onexstone.online/tags/SpringBoot/"/>
-    
     <category term="QuickStart" scheme="https://www.onexstone.online/tags/QuickStart/"/>
+    
+    <category term="SpringBoot" scheme="https://www.onexstone.online/tags/SpringBoot/"/>
     
   </entry>
   

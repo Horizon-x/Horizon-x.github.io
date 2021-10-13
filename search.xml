@@ -138,9 +138,9 @@
       
         <tags>
             
-            <tag> QuickStart </tag>
-            
             <tag> MyBlogs </tag>
+            
+            <tag> QuickStart </tag>
             
         </tags>
       
@@ -192,9 +192,9 @@
             
             <tag> Java </tag>
             
-            <tag> SpringBoot </tag>
-            
             <tag> QuickStart </tag>
+            
+            <tag> SpringBoot </tag>
             
         </tags>
       

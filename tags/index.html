@@ -33,7 +33,7 @@ document.addEventListener("pjax:success", initScrollReveal);
   const wordcloud_canvas = document.getElementById('wordcloud-canvas')
   wordcloud_canvas.width = document.querySelector('#page').clientWidth - 16
   wordcloud_canvas.height = 350
-  let wordcloud_config = {"list":[["OSI",1.1,"/tags/OSI/"],["HTTP",1.1,"/tags/HTTP/"],["JVM",1.4,"/tags/JVM/"],["Java",1.6,"/tags/Java/"],["锁优化策略",1.1,"/tags/锁优化策略/"],["MyBlogs",1.1,"/tags/MyBlogs/"],["QuickStart",1.2,"/tags/QuickStart/"],["线程安全",1.1,"/tags/线程安全/"],["GC",1.1,"/tags/GC/"],["SpringBoot",1.1,"/tags/SpringBoot/"],["语法糖",1.1,"/tags/语法糖/"]],"fontFamily":"'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif","fontWeight":400,"gridSize":10,"weightFactor":13,"backgroundColor":"transparent","color":"random-dark"}
+  let wordcloud_config = {"list":[["OSI",1.1,"/tags/OSI/"],["HTTP",1.1,"/tags/HTTP/"],["JVM",1.4,"/tags/JVM/"],["Java",1.6,"/tags/Java/"],["锁优化策略",1.1,"/tags/锁优化策略/"],["线程安全",1.1,"/tags/线程安全/"],["GC",1.1,"/tags/GC/"],["语法糖",1.1,"/tags/语法糖/"],["MyBlogs",1.1,"/tags/MyBlogs/"],["QuickStart",1.2,"/tags/QuickStart/"],["SpringBoot",1.1,"/tags/SpringBoot/"]],"fontFamily":"'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif","fontWeight":400,"gridSize":10,"weightFactor":13,"backgroundColor":"transparent","color":"random-dark"}
   wordcloud_config.hover = function(item, dimension){
     if (!dimension) {
       wordbox.hidden = true
@@ -59,6 +59,8 @@ loadWordcloud();</script></div><div class="hty-card" id="comment"><div class="co
   const walineConfig = {"enable":true,"serverURL":"https://my-blogs-comment-system-gkgzbdn2n-horizon-x.vercel.app","visitor":true,"comment":true,"el":"#waline","lang":"zh-CN"}
   walineConfig.path = "/tags/index.html"
   walineConfig.dark = 'html[data-user-color-scheme="dark"]'
+  walineConfig.emoji =  ['https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-emoji','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-flag','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tw-weather','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/bilibili','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/alus','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/weibo','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/qq','https://cdn.jsdelivr.net/gh/walinejs/emojis@1.0.0/tieba',]
+  walineConfig.avatar = 'identicon'
   new Waline(walineConfig)
 }, window.Waline);</script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">京ICP备2021017712号</a></div><div class="copyright"><span>&copy; 2021 </span><a class="with-love" id="animate" target="_blank" rel="noopener" href="http://onexstone.online" title="about me"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></a><span class="author"> ONESTONE</span><spen> | </spen><script>function blog_cnzz_analytics() {
   document.write(unescape("%3Cspan id='cnzz_stat_icon_1280383522'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1280383522' type='text/javascript'%3E%3C/script%3E"));

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.onexstone.online/posts/4a17b156/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.onexstone.online/shuoshuo/index.html</loc>
     
     <lastmod>2021-10-14</lastmod>
@@ -93,13 +100,6 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/posts/4a17b156/</loc>
-    
-    <lastmod>2021-09-26</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.onexstone.online/albums/index.html</loc>
     
     <lastmod>2021-09-26</lastmod>
@@ -172,20 +172,6 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/MyBlogs/</loc>
-    <lastmod>2021-10-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.onexstone.online/tags/QuickStart/</loc>
-    <lastmod>2021-10-14</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.onexstone.online/tags/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2021-10-14</lastmod>
     <changefreq>daily</changefreq>
@@ -200,14 +186,28 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/SpringBoot/</loc>
+    <loc>https://www.onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/</loc>
     <lastmod>2021-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/tags/%E8%AF%AD%E6%B3%95%E7%B3%96/</loc>
+    <loc>https://www.onexstone.online/tags/MyBlogs/</loc>
+    <lastmod>2021-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.onexstone.online/tags/QuickStart/</loc>
+    <lastmod>2021-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.onexstone.online/tags/SpringBoot/</loc>
     <lastmod>2021-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -251,14 +251,14 @@
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/Java/JVM/</loc>
+    <loc>https://www.onexstone.online/categories/Spring/</loc>
     <lastmod>2021-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.onexstone.online/categories/Spring/</loc>
+    <loc>https://www.onexstone.online/categories/Java/JVM/</loc>
     <lastmod>2021-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

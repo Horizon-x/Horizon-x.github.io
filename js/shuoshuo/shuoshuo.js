@@ -1,7 +1,9 @@
 new Artitalk({
-    serverURL: 'https://spring-paper-4d55.onexstone.workers.dev',
-    appId: 'dfaskjfhlsaf-asdfsa',
-    appKey: 'safuoghksahdfasf',
+    //serverURL: 'https://spring-paper-4d55.onexstone.workers.dev',
+    // appId: 'dfaskjfhlsaf-asdfsa',
+    // appKey: 'safuoghksahdfasf',
+    appId: 'c7zbIlit52fCRpAxAB9m75cl-MdYXbMMI',
+    appKey: 'JVrsX6JrOaCX12KwWwubGIV7',
     pageSize: 8,
     shuoPla: '记录下今天的好心情！',
     avatarPla: 'https://cdn.jsdelivr.net/gh/horizon-x/imagesCDN/img/avatar-auther.png',
